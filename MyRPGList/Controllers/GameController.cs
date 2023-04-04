@@ -8,13 +8,20 @@ namespace MyRPGList.Controllers;
 public class GameController : ControllerBase
 {
 
-    private List<Game> games = new List<Game>();
+    private static List<Game> games = new List<Game>();
 
     [HttpPost]
     public void AddGame([FromBody] Game game)
     {
         games.Add(game);
+        game.Id = games.Count;
         Console.WriteLine(game.Name);
         Console.WriteLine(game.Developer);
+    }
+
+    [HttpGet]
+    public List<Game> GetAllGames()
+    {
+        return games;
     }
 }
