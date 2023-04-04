@@ -21,9 +21,9 @@ public class GameController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<Game> GetAllGames()
+    public IEnumerable<Game> GetAllGames([FromQuery]int skip = 0, [FromQuery]int take = 20)
     {
-        return games;
+        return games.Skip(skip).Take(take);
     }
 
     [HttpGet("{id}")]
