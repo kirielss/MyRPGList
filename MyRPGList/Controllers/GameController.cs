@@ -9,19 +9,26 @@ public class GameController : ControllerBase
 {
 
     private static List<Game> games = new List<Game>();
+    private static int id = 0;
 
     [HttpPost]
     public void AddGame([FromBody] Game game)
     {
+        game.Id = id++;
         games.Add(game);
-        game.Id = games.Count;
         Console.WriteLine(game.Name);
         Console.WriteLine(game.Developer);
     }
 
     [HttpGet]
-    public List<Game> GetAllGames()
+    public IEnumerable<Game> GetAllGames()
     {
         return games;
+    }
+
+    [HttpGet("{id}")]
+    public Game? GetGameById(int id)
+    {
+        return games.FirstOrDefault(game => game.Id == id);
     }
 }
