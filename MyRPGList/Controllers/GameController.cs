@@ -12,12 +12,11 @@ public class GameController : ControllerBase
     private static int id = 0;
 
     [HttpPost]
-    public void AddGame([FromBody] Game game)
+    public IActionResult AddGame([FromBody] Game game)
     {
         game.Id = id++;
         games.Add(game);
-        Console.WriteLine(game.Name);
-        Console.WriteLine(game.Developer);
+        return CreatedAtAction(nameof(GetGameById), new {id = game.Id}, game);
     }
 
     [HttpGet]
@@ -27,8 +26,10 @@ public class GameController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public Game? GetGameById(int id)
+    public IActionResult GetGameById(int id)
     {
-        return games.FirstOrDefault(game => game.Id == id);
+        var game = games.FirstOrDefault(game => game.Id == id);
+        if (game == null) return NotFound();
+        return Ok();
     }
 }
