@@ -57,4 +57,15 @@ public class GameController : ControllerBase
         if (game == null) return NotFound();
         return Ok(game);
     }
+
+    [HttpPut("{id}")]
+    public IActionResult UpsertGame(int id, [FromBody] UpdateGameDto gameDto)
+    {
+        var game = _dbContext.Games.FirstOrDefault(game => game.Id == id);
+        if (game == null) return NotFound();
+        _mapper.Map(gameDto, game);
+        _dbContext.SaveChanges();
+        return NoContent();
+
+    }
 }
