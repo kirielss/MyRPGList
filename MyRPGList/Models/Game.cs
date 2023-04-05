@@ -4,6 +4,8 @@ namespace MyRPGList.Models
 {
     public class Game
     {
+        [Key]
+        [Required]
         public int Id { get; set; }
         [Required(ErrorMessage = "Please enter the name of the game")]
         [MaxLength(100, ErrorMessage ="The name of the game cannot exceed 100 characters")]
