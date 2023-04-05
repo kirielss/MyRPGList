@@ -10,5 +10,6 @@ public class GameProfile : Profile
     {
         CreateMap<CreateGameDto, Game>();
         CreateMap<UpdateGameDto, Game>();
+        CreateMap<Game, UpdateGameDto>();
     }
 }

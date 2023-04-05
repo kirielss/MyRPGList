@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Azure;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using MyRPGList.Data;
 using MyRPGList.Data.DTOs;
@@ -59,7 +61,7 @@ public class GameController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult UpsertGame(int id, [FromBody] UpdateGameDto gameDto)
+    public IActionResult UpdateGame(int id, [FromBody] UpdateGameDto gameDto)
     {
         var game = _dbContext.Games.FirstOrDefault(game => game.Id == id);
         if (game == null) return NotFound();
@@ -67,5 +69,25 @@ public class GameController : ControllerBase
         _dbContext.SaveChanges();
         return NoContent();
 
+    }
+
+    [HttpPatch("{id}")]
+    public IActionResult UpdateGamePatch(int id, JsonPatchDocument<UpdateGameDto> patch)
+    {
+        var game = _dbContext.Games.FirstOrDefault(game => game.Id == id);
+        if (game == null) return NotFound();
+
+        var GameToUpdate = _mapper.Map<UpdateGameDto>(game);
+
+        patch.ApplyTo(GameToUpdate, ModelState);
+
+        if (!TryValidateModel(GameToUpdate))
+        {
+            return ValidationProblem(ModelState);
+        }
+
+        _mapper.Map(GameToUpdate, game);
+        _dbContext.SaveChanges();
+        return NoContent();
     }
 }
