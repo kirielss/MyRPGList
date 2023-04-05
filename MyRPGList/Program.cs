@@ -13,6 +13,8 @@ public class Program
 
         builder.Services.AddDbContext<MyRpgListDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+        builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
         // Add services to the container.
 
         builder.Services.AddControllers();

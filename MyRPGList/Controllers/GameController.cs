@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using MyRPGList.Data;
+using MyRPGList.Data.DTOs;
 using MyRPGList.Models;
 
 namespace MyRPGList.Controllers;
@@ -16,16 +18,27 @@ public class GameController : ControllerBase
     // essa dependência do contexto enseja na famigerada INJEÇÃO DE DEPENDÊNCIA
 
     private MyRpgListDbContext _dbContext;
+    private IMapper _mapper;
 
     // injeção de dependência
-    public GameController(MyRpgListDbContext dbContext)
+    public GameController(MyRpgListDbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext;
+        _mapper = mapper;
     }
 
     [HttpPost]
-    public IActionResult AddGame([FromBody] Game game)
+    public IActionResult AddGame([FromBody] CreateGameDto gameDto)
     {
+        //Game game = new Game
+        //{
+        //    Name = gameDto.Name,
+        //    Developer = gameDto.Developer,
+        //    Description = gameDto.Description,
+        //};
+        // n vai ser necessario fazer isso, pois existe AUTOMAPPER
+
+        Game game = _mapper.Map<Game>(gameDto);
         _dbContext.Games.Add(game);
         _dbContext.SaveChanges();
         return CreatedAtAction(nameof(GetGameById), new {id = game.Id}, game);
@@ -42,6 +55,6 @@ public class GameController : ControllerBase
     {
         var game = _dbContext.Games.FirstOrDefault(game => game.Id == id);
         if (game == null) return NotFound();
-        return Ok();
+        return Ok(game);
     }
 }
