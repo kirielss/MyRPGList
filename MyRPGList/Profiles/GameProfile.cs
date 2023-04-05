@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MyRPGList.Data.Dtos;
 using MyRPGList.Data.DTOs;
 using MyRPGList.Models;
 
@@ -11,5 +12,6 @@ public class GameProfile : Profile
         CreateMap<CreateGameDto, Game>();
         CreateMap<UpdateGameDto, Game>();
         CreateMap<Game, UpdateGameDto>();
+        CreateMap<Game, ReadGameDto>();
     }
 }

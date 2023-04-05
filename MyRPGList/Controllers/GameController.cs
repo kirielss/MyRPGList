@@ -90,4 +90,14 @@ public class GameController : ControllerBase
         _dbContext.SaveChanges();
         return NoContent();
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteGame(int id)
+    {
+        var game = _dbContext.Games.FirstOrDefault(game => game.Id == id);
+        if (game == null) return NotFound();
+        _dbContext.Remove(game);
+        _dbContext.SaveChanges();
+        return NoContent();
+    }
 }
