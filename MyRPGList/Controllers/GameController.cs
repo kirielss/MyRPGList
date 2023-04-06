@@ -17,7 +17,6 @@ public class GameController : ControllerBase
     private MyRpgListDbContext _dbContext;
     private IMapper _mapper;
 
-    // injeção de dependência
     public GameController(MyRpgListDbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext;
@@ -25,23 +24,15 @@ public class GameController : ControllerBase
     }
 
     /// <summary>
-    /// Adiciona um filme ao banco de dados
+    /// Adiciona um jogo ao banco de dados
     /// </summary>
-    /// <param name="filmeDto">Objeto com os campos necessários para criação de um filme</param>
+    /// <param name="gameDto">Objeto com os campos necessários para criação de um jogo</param>
     /// <returns>IActionResult</returns>
     /// <response code="201">Caso inserção seja feita com sucesso</response>
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public IActionResult AddGame([FromBody] CreateGameDto gameDto)
     {
-        //Game game = new Game
-        //{
-        //    Name = gameDto.Name,
-        //    Developer = gameDto.Developer,
-        //    Description = gameDto.Description,
-        //};
-        // n vai ser necessario fazer isso, pois existe AUTOMAPPER
 
         Game game = _mapper.Map<Game>(gameDto);
         _dbContext.Games.Add(game);
@@ -49,12 +40,23 @@ public class GameController : ControllerBase
         return CreatedAtAction(nameof(GetGameById), new {id = game.Id}, game);
     }
 
+    /// <summary>
+    /// Pesquisa uma quantidade de jogos no banco de dados. Valor padrão: 20 itens.
+    /// </summary>
+    /// <returns>IActionResult</returns>
+    /// <response code="200">Caso pesquisa seja feita com sucesso</response>
     [HttpGet]
     public IEnumerable<ReadGameDto> GetAllGames([FromQuery]int skip = 0, [FromQuery]int take = 20)
     {
         return _mapper.Map<List<ReadGameDto>>(_dbContext.Games.Skip(skip).Take(take));
     }
 
+    /// <summary>
+    /// Pesquisa um jogo no banco de dados
+    /// </summary>
+    /// <param name="id">Inteiro com o Id para encontrar o jogo</param>
+    /// <returns>IActionResult</returns>
+    /// <response code="200">Caso pesquisa seja feita com sucesso</response>
     [HttpGet("{id}")]
     public IActionResult GetGameById(int id)
     {
@@ -64,6 +66,12 @@ public class GameController : ControllerBase
         return Ok(gameDto);
     }
 
+    /// <summary>
+    /// Edita um jogo no banco de dados.
+    /// </summary>
+    /// <param name="id">Inteiro com o Id para encontrar o jogo</param>
+    /// <returns>IActionResult</returns>
+    /// <response code="204">Caso pesquisa seja feita com sucesso</response>
     [HttpPut("{id}")]
     public IActionResult UpdateGame(int id, [FromBody] UpdateGameDto gameDto)
     {
@@ -75,6 +83,12 @@ public class GameController : ControllerBase
 
     }
 
+    /// <summary>
+    /// Edita um dado de um jogo no banco de dados.
+    /// </summary>
+    /// <param name="id">Inteiro com o Id para encontrar o jogo</param>
+    /// <returns>IActionResult</returns>
+    /// <response code="204">Caso pesquisa seja feita com sucesso</response>
     [HttpPatch("{id}")]
     public IActionResult UpdateGamePatch(int id, JsonPatchDocument<UpdateGameDto> patch)
     {
@@ -95,6 +109,12 @@ public class GameController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Deleta um jogo no banco de dados.
+    /// </summary>
+    /// <param name="id">Inteiro com o Id para encontrar o jogo</param>
+    /// <returns>IActionResult</returns>
+    /// <response code="204">Caso pesquisa seja feita com sucesso</response>
     [HttpDelete("{id}")]
     public IActionResult DeleteGame(int id)
     {
