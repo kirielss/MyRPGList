@@ -3,6 +3,7 @@ using Azure;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using MyRPGList.Data;
+using MyRPGList.Data.Dtos;
 using MyRPGList.Data.DTOs;
 using MyRPGList.Models;
 
@@ -12,12 +13,6 @@ namespace MyRPGList.Controllers;
 [Route("[controller]")]
 public class GameController : ControllerBase
 {
-
-    //private static List<Game> games = new List<Game>();
-    //private static int id = 0;
-    // these lines doesnt apply anymore as now controller needs to pickup data from the DB
-    // agora pra funcionar precisa do contexto que vai ser responsável por acessar o banco de dados
-    // essa dependência do contexto enseja na famigerada INJEÇÃO DE DEPENDÊNCIA
 
     private MyRpgListDbContext _dbContext;
     private IMapper _mapper;
@@ -29,7 +24,15 @@ public class GameController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Adiciona um filme ao banco de dados
+    /// </summary>
+    /// <param name="filmeDto">Objeto com os campos necessários para criação de um filme</param>
+    /// <returns>IActionResult</returns>
+    /// <response code="201">Caso inserção seja feita com sucesso</response>
+
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public IActionResult AddGame([FromBody] CreateGameDto gameDto)
     {
         //Game game = new Game
@@ -47,9 +50,9 @@ public class GameController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<Game> GetAllGames([FromQuery]int skip = 0, [FromQuery]int take = 20)
+    public IEnumerable<ReadGameDto> GetAllGames([FromQuery]int skip = 0, [FromQuery]int take = 20)
     {
-        return _dbContext.Games.Skip(skip).Take(take);
+        return _mapper.Map<List<ReadGameDto>>(_dbContext.Games.Skip(skip).Take(take));
     }
 
     [HttpGet("{id}")]
@@ -57,7 +60,8 @@ public class GameController : ControllerBase
     {
         var game = _dbContext.Games.FirstOrDefault(game => game.Id == id);
         if (game == null) return NotFound();
-        return Ok(game);
+        var gameDto = _mapper.Map<ReadGameDto>(game);
+        return Ok(gameDto);
     }
 
     [HttpPut("{id}")]
