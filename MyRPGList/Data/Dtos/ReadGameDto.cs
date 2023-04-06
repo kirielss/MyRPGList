@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MyRPGList.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyRPGList.Data.Dtos;
 

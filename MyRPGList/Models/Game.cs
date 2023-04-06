@@ -12,6 +12,6 @@ public class Game
     public string Name { get; set; }
     [Required(ErrorMessage ="Please enter the name of the developer")]
     [MaxLength(100, ErrorMessage = "The name of the developer cannot exceed 100 characters")]
-    public string Developer { get; set; }
+    public virtual Dev Developer { get; set; }
     public string? Description { get; set; }
 }

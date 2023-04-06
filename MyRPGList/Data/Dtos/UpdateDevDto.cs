@@ -1,15 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyRPGList.Models
+namespace MyRPGList.Data.Dtos
 {
-    public class Dev
+    public class UpdateDevDto
     {
-        [Key]
-        [Required]
-        public int Id { get; set; }
         [Required(ErrorMessage = "O campo de nome é obrigatório")]
         public string Name { get; set; }
-        public virtual ICollection<Game> Games { get; set; }
         public string? Description { get; set; }
     }
 }
