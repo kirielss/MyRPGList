@@ -43,6 +43,8 @@ public class GameController : ControllerBase
     /// <summary>
     /// Pesquisa uma quantidade de jogos no banco de dados. Valor padrão: 20 itens.
     /// </summary>
+    /// <param name="skip">Número do index da página</param>
+    /// <param name="take">Número de elementos a serem carregados por página</param>
     /// <returns>IActionResult</returns>
     /// <response code="200">Caso pesquisa seja feita com sucesso</response>
     [HttpGet]
