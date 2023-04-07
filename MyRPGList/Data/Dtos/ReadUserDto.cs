@@ -1,9 +1,8 @@
-﻿namespace MyRPGList.Data.Dtos
+﻿namespace MyRPGList.Data.Dtos;
+
+public class ReadUserDto
 {
-    public class ReadUserDto
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string UserName { get; set; }
-    }
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string UserName { get; set; }
 }
