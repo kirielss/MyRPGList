@@ -1,6 +1,9 @@
-﻿namespace MyRPGList.Data.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MyRPGList.Data.Dtos;
+
+public class UpdateDevDto
 {
-    public class UpdateDevDto
-    {
-    }
+    [Required(ErrorMessage = "O campo de nome é obrigatório.")]
+    public string Name { get; set; }
 }
