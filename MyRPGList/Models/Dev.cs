@@ -9,7 +9,7 @@ namespace MyRPGList.Models
         public int Id { get; set; }
         [Required(ErrorMessage = "O campo de nome é obrigatório.")]
         public string Name { get; set; }
-        public ICollection<Game> Games { get; set; }
+        public ICollection<Game> DevGames { get; set; }
         public string? Description { get; set; }
     }
 }
